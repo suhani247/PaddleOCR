@@ -342,7 +342,7 @@ class PaddleOCR(predict_system.TextSystem):
         # init det_model and rec_model
         super().__init__(params)
 
-    def ocr(self, img, det=True, rec=True, cls=True):
+    def ocr(self, img, det=True, rec=True, cls=True, box=None):
         """
         ocr with paddleocr
         args：
@@ -377,7 +377,7 @@ class PaddleOCR(predict_system.TextSystem):
         if isinstance(img, np.ndarray) and len(img.shape) == 2:
             img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
         if det and rec:
-            dt_boxes, rec_res = self.__call__(img, cls)
+            dt_boxes, rec_res = self.__call__(img, cls, box)
             return [[box.tolist(), res] for box, res in zip(dt_boxes, rec_res)]
         elif det and not rec:
             dt_boxes, elapse = self.text_detector(img)
